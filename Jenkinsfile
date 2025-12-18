@@ -61,12 +61,10 @@ pipeline {
         stage('Apply / Destroy') {
             steps {
                 script {
-                    def approveFlag = params.autoApprove ? '--auto-approve' : ''
-
                     if (isUnix()) {
-                        sh "terraform ${params.action} ${approveFlag}"
+                        sh "terraform ${params.action} --auto-approve"
                     } else {
-                        bat "terraform ${params.action} ${approveFlag}"
+                        bat "terraform ${params.action} --auto-approve"
                     }
                 }
             }
