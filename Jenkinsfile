@@ -19,13 +19,22 @@ pipeline {
         }
         stage('Terraform init') {
             steps {
-                bat 'terraform init'
+              if (isUnix()) {
+                sh 'terraform init'
+              } else {
+                 bat 'terraform init'
+              }
             }
         }
         stage('Plan') {
             steps {
+              if (isUnix()) {
                 bat 'terraform plan -out tfplan'
                 bat 'terraform show -no-color tfplan > tfplan.txt'
+             } else {
+                bat 'terraform plan -out tfplan'
+                bat 'terraform show -no-color tfplan > tfplan.txt'
+              }
             }
         }
         stage('Apply / Destroy') {
