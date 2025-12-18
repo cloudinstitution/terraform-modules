@@ -22,15 +22,15 @@ pipeline {
               if (isUnix()) {
                 sh 'terraform init'
               } else {
-                 bat 'terraform init'
+                bat 'terraform init'
               }
             }
         }
         stage('Plan') {
             steps {
               if (isUnix()) {
-                bat 'terraform plan -out tfplan'
-                bat 'terraform show -no-color tfplan > tfplan.txt'
+                sh 'terraform plan -out tfplan'
+                sh 'terraform show -no-color tfplan > tfplan.txt'
              } else {
                 bat 'terraform plan -out tfplan'
                 bat 'terraform show -no-color tfplan > tfplan.txt'
@@ -40,7 +40,12 @@ pipeline {
         stage('Apply / Destroy') {
             steps {
                 script {
+              if (isUnix()) {
+                   sh 'terraform ${action} --auto-approve'
+              } 
+              else {
                    bat 'terraform ${action} --auto-approve'
+              }
                 }
             }
         }
